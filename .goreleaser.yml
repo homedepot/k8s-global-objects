@@ -1,0 +1,47 @@
+before:
+  hooks:
+    - make clean
+    # you may remove this if you don't need go generate
+    - go generate ./...
+    # run formatting for go
+    - make format 
+    # run test
+    - make test
+builds:
+  - main: main.go
+    binary: k8s-global-objects 
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+dist:
+  _dist
+dockers:
+  -
+    # GOOS of the built binary that should be used.
+    goos: linux
+    # GOARCH of the built binary that should be used.
+    goarch: amd64
+    # Templates of the Docker image names.
+    image_templates:
+    - "homedepottech/k8s-global-objects:latest"
+    - "homedepottech/k8s-global-objects:{{ .Tag }}"
+    dockerfile: Dockerfile
+    # Skips the docker push. Could be useful if you also do draft releases.
+    # Defaults to false.
+    skip_push: true 
+archive:
+  format: tar.gz
+  files:
+    - README.md
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'

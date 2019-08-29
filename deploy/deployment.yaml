@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: k8s-global-objects-app
+  namespace: k8s-global-objects
+  labels:
+    app: k8s-global-objects-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-global-objects-app
+  template:
+    metadata:
+      labels:
+        app: k8s-global-objects-app
+    spec:
+      serviceAccountName: k8s-global-objects
+      containers:
+        - name:  k8s-global-objects-app-container
+          image: homedepottech/k8s-global-objects:v0.0.1
+          imagePullPolicy: Always
+          #args: ["-runinterval", "30s", "-debug"]
+          resources:
+            limits:
+               cpu: 0.1
+               memory: 50Mi
+            requests:
+               cpu: 0.1
+               memory: 50Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["all"]
+            readOnlyRootFilesystem: true
+            runAsGroup: 10001
+            runAsNonRoot: true
+            runAsUser: 10001
