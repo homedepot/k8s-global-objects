@@ -1,4 +1,4 @@
-module github.com/k8s-global-objects
+module github.com/homedepot/k8s-global-objects
 
 go 1.16
 
